@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Ubicaciones</title>
+    <link rel="stylesheet" href="css/estilos.css">
+    <script src="js/funciones.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>Gestión de Ubicaciones</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="eventos.html">Eventos</a></li>
+                <li><a href="ubicaciones.html">Ubicaciones</a></li>
+                <li><a href="contactos.html">Contactos</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Formulario para registrar una ubicación -->
+        <section>
+            <h2>Registrar nueva ubicación</h2>
+            <form id="formUbicacion">
+                <label for="titulo">Título:</label>
+                <input type="text" id="titulo" name="titulo" required>
+
+                <label for="direccion">Dirección:</label>
+                <input type="text" id="direccion" name="direccion" required>
+
+                <label for="coordenadas">Coordenadas geográficas:</label>
+                <input type="text" id="coordenadas" name="coordenadas" placeholder="Ej: -0.1807, -78.4678">
+
+                <button type="submit">Guardar Ubicación</button>
+            </form>
+        </section>
+
+        <!-- Lista de ubicaciones registradas -->
+        <section>
+            <h2>Lista de ubicaciones</h2>
+            <ul id="listaUbicaciones">
+                <!-- Aquí se mostrarán las ubicaciones registradas -->
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 - Caso Práctico Interacción Hombre-Máquina</p>
+    </footer>
+</body>
+</html>

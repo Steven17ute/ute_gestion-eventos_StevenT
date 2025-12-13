@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Eventos</title>
+    <link rel="stylesheet" href="css/estilos.css">
+    <script src="js/funciones.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>Gestión de Eventos</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="eventos.html">Eventos</a></li>
+                <li><a href="ubicaciones.html">Ubicaciones</a></li>
+                <li><a href="contactos.html">Contactos</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Formulario para registrar un evento -->
+        <section>
+            <h2>Registrar nuevo evento</h2>
+            <form id="formEvento">
+                <label for="titulo">Título:</label>
+                <input type="text" id="titulo" name="titulo" required>
+
+                <label for="invitados">Invitados:</label>
+                <input type="text" id="invitados" name="invitados">
+
+                <label for="fecha">Fecha:</label>
+                <input type="date" id="fecha" name="fecha" required>
+
+                <label for="hora">Hora:</label>
+                <input type="time" id="hora" name="hora" required>
+
+                <label for="zona">Zona horaria:</label>
+                <input type="text" id="zona" name="zona">
+
+                <label for="descripcion">Descripción:</label>
+                <textarea id="descripcion" name="descripcion"></textarea>
+
+                <label for="repeticion">Repetición:</label>
+                <select id="repeticion" name="repeticion">
+                    <option value="ninguna">Ninguna</option>
+                    <option value="diaria">Diaria</option>
+                    <option value="semanal">Semanal</option>
+                    <option value="mensual">Mensual</option>
+                </select>
+
+                <label for="recordatorio">Recordatorio:</label>
+                <input type="checkbox" id="recordatorio" name="recordatorio"> Activar
+
+                <label for="clasificacion">Clasificación:</label>
+                <input type="text" id="clasificacion" name="clasificacion">
+
+                <label for="lugar">Lugar:</label>
+                <input type="text" id="lugar" name="lugar">
+
+                <button type="submit">Guardar Evento</button>
+            </form>
+        </section>
+
+        <!-- Lista de eventos registrados -->
+        <section>
+            <h2>Lista de eventos</h2>
+            <ul id="listaEventos">
+                <!-- Aquí se mostrarán los eventos registrados -->
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 - Caso Práctico Interacción Hombre-Máquina</p>
+    </footer>
+</body>
+</html>

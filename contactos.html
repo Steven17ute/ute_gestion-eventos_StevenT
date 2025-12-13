@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Contactos</title>
+    <link rel="stylesheet" href="css/estilos.css">
+    <script src="js/funciones.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>Gestión de Contactos</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="eventos.html">Eventos</a></li>
+                <li><a href="ubicaciones.html">Ubicaciones</a></li>
+                <li><a href="contactos.html">Contactos</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Formulario para registrar un contacto -->
+        <section>
+            <h2>Registrar nuevo contacto</h2>
+            <form id="formContacto">
+                <label for="saludo">Saludo:</label>
+                <select id="saludo" name="saludo">
+                    <option value="Sr.">Sr.</option>
+                    <option value="Sra.">Sra.</option>
+                    <option value="Dr.">Dr.</option>
+                    <option value="Lic.">Lic.</option>
+                </select>
+
+                <label for="nombre">Nombre completo:</label>
+                <input type="text" id="nombre" name="nombre" required>
+
+                <label for="identificacion">Número de identificación:</label>
+                <input type="text" id="identificacion" name="identificacion" required>
+
+                <label for="correo">Correo electrónico:</label>
+                <input type="email" id="correo" name="correo" required>
+
+                <label for="telefono">Número de teléfono:</label>
+                <input type="tel" id="telefono" name="telefono">
+
+                <label for="foto">Fotografía:</label>
+                <input type="file" id="foto" name="foto" accept="image/*">
+
+                <button type="submit">Guardar Contacto</button>
+            </form>
+        </section>
+
+        <!-- Lista de contactos registrados -->
+        <section>
+            <h2>Lista de contactos</h2>
+            <ul id="listaContactos">
+                <!-- Aquí se mostrarán los contactos registrados -->
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 - Caso Práctico Interacción Hombre-Máquina</p>
+    </footer>
+</body>
+</html>
