@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Eventos</title>
     <link rel="stylesheet" href="css/estilos.css">
-    <script src="js/funciones.js" defer></script>
 </head>
 
 <body>
@@ -26,16 +25,16 @@
 <h2>Registrar nuevo evento</h2>
 
 <form id="formEvento">
-    <input id="titulo" placeholder="Título" required>
-    <input id="invitados" placeholder="Invitados">
-    <input type="date" id="fecha" required>
-    <input type="time" id="hora" required>
-    <input id="zona" placeholder="Zona horaria">
-    <textarea id="descripcion" placeholder="Descripción"></textarea>
-    <input id="clasificacion" placeholder="Clasificación">
-    <input id="lugar" placeholder="Lugar">
+    <input type="text" id="titulo" name="titulo" placeholder="Título" required>
+    <input type="text" id="invitados" name="invitados" placeholder="Invitados">
+    <input type="date" id="fecha" name="fecha" required>
+    <input type="time" id="hora" name="hora" required>
+    <input type="text" id="zona" name="zona" placeholder="Zona horaria">
+    <textarea id="descripcion" name="descripcion" placeholder="Descripción"></textarea>
+    <input type="text" id="clasificacion" name="clasificacion" placeholder="Clasificación">
+    <input type="text" id="lugar" name="lugar" placeholder="Lugar">
 
-    🔥 <button type="button" onclick="guardarEvento()">Guardar Evento</button>
+    <button type="button" onclick="guardarEvento()">Guardar Evento</button>
 </form>
 </section>
 </main>
@@ -44,37 +43,47 @@
 <p>&copy; 2025 - Caso Práctico Interacción Hombre-Máquina</p>
 </footer>
 
-<!-- 🔥 FIREBASE VA AQUÍ -->
+<!-- FIREBASE -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "TU_API_KEY",
-  authDomain: "TU_DOMINIO",
-  projectId: "TU_PROJECT_ID"
+  apiKey: "AIzaSyCR9vM3HNZ0QyCpi0tLV-g865VQ53XcBP4",
+  authDomain: "gestion-eventos-steven.firebaseapp.com",
+  projectId: "gestion-eventos-steven",
+  storageBucket: "gestion-eventos-steven.firebasestorage.app",
+  messagingSenderId: "313497308958",
+  appId: "1:313497308958:web:f44475e174ab062ab7430f"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 window.guardarEvento = async function () {
-  await addDoc(collection(db, "eventos"), {
-    titulo: titulo.value,
-    invitados: invitados.value,
-    fecha: fecha.value,
-    hora: hora.value,
-    zona: zona.value,
-    descripcion: descripcion.value,
-    clasificacion: clasificacion.value,
-    lugar: lugar.value,
-    creado: new Date()
-  });
+  try {
+    await addDoc(collection(db, "eventos"), {
+      titulo: document.getElementById("titulo").value,
+      invitados: document.getElementById("invitados").value,
+      fecha: document.getElementById("fecha").value,
+      hora: document.getElementById("hora").value,
+      zona: document.getElementById("zona").value,
+      descripcion: document.getElementById("descripcion").value,
+      clasificacion: document.getElementById("clasificacion").value,
+      lugar: document.getElementById("lugar").value,
+      creado: new Date()
+    });
 
-  alert("✅ Evento guardado en Firebase");
-  document.getElementById("formEvento").reset();
-}
+    alert("✅ Evento guardado en Firebase");
+    document.getElementById("formEvento").reset();
+
+  } catch (error) {
+    alert("❌ Error al guardar el evento");
+    console.error(error);
+  }
+};
 </script>
 
 </body>
 </html>
+
