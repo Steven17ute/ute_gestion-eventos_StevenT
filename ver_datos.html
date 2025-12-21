@@ -5,18 +5,70 @@
   <title>Consulta de Datos</title>
   <link rel="stylesheet" href="css/estilos.css">
 </head>
+
 <body>
 
-<h1>Consulta de Datos (Solo lectura)</h1>
+<header>
+  <h1>Consulta de Datos (Solo lectura)</h1>
+</header>
 
-<h2>📅 Eventos</h2>
-<ul id="listaEventos"></ul>
+<main>
 
-<h2>📍 Ubicaciones</h2>
-<ul id="listaUbicaciones"></ul>
+<!-- EVENTOS -->
+<section>
+  <h2>📅 Eventos</h2>
+  <table class="tabla">
+    <thead>
+      <tr>
+        <th>Título</th>
+        <th>Fecha</th>
+        <th>Hora</th>
+        <th>Lugar</th>
+      </tr>
+    </thead>
+    <tbody id="tablaEventos"></tbody>
+  </table>
+</section>
 
-<h2>👤 Contactos</h2>
-<ul id="listaContactos"></ul>
+<!-- UBICACIONES -->
+<section>
+  <h2>📍 Ubicaciones</h2>
+  <table class="tabla">
+    <thead>
+      <tr>
+        <th>Título</th>
+        <th>Dirección</th>
+        <th>Coordenadas</th>
+      </tr>
+    </thead>
+    <tbody id="tablaUbicaciones"></tbody>
+  </table>
+</section>
+
+<!-- CONTACTOS -->
+<section>
+  <h2>👤 Contactos</h2>
+  <table class="tabla">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Teléfono</th>
+        <th>Correo</th>
+        <th>Tipo</th>
+      </tr>
+    </thead>
+    <tbody id="tablaContactos"></tbody>
+  </table>
+
+  <br>
+  <a href="index.html" class="btn-regresar">⬅ Regresar</a>
+</section>
+
+</main>
+
+<footer>
+  <p>&copy; 2025 - Gestión de Eventos</p>
+</footer>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
@@ -35,27 +87,45 @@ const db = getFirestore(app);
 const eventosSnap = await getDocs(collection(db, "eventos"));
 eventosSnap.forEach(doc => {
   const e = doc.data();
-  document.getElementById("listaEventos").innerHTML +=
-    `<li>${e.titulo} - ${e.fecha} ${e.hora}</li>`;
+  document.getElementById("tablaEventos").innerHTML += `
+    <tr>
+      <td>${e.titulo || ""}</td>
+      <td>${e.fecha || ""}</td>
+      <td>${e.hora || ""}</td>
+      <td>${e.lugar || ""}</td>
+    </tr>
+  `;
 });
 
 /* UBICACIONES */
 const ubicSnap = await getDocs(collection(db, "ubicaciones"));
 ubicSnap.forEach(doc => {
   const u = doc.data();
-  document.getElementById("listaUbicaciones").innerHTML +=
-    `<li>${u.titulo} - ${u.direccion}</li>`;
+  document.getElementById("tablaUbicaciones").innerHTML += `
+    <tr>
+      <td>${u.titulo || ""}</td>
+      <td>${u.direccion || ""}</td>
+      <td>${u.coordenadas || ""}</td>
+    </tr>
+  `;
 });
 
 /* CONTACTOS */
 const contSnap = await getDocs(collection(db, "contactos"));
 contSnap.forEach(doc => {
   const c = doc.data();
-  document.getElementById("listaContactos").innerHTML +=
-    `<li>${c.nombre} - ${c.email}</li>`;
+  document.getElementById("tablaContactos").innerHTML += `
+    <tr>
+      <td>${c.nombre || ""}</td>
+      <td>${c.telefono || ""}</td>
+      <td>${c.email || ""}</td>
+      <td>${c.tipo || ""}</td>
+    </tr>
+  `;
 });
 </script>
 
 </body>
 </html>
+
 
