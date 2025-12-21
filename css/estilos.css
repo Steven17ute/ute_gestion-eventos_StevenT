@@ -104,3 +104,37 @@ footer {
     color: white;
     border-radius: 5px;
 }
+
+/* ============================= */
+/* PANEL RESUMEN - INDEX */
+/* ============================= */
+
+.panel-resumen {
+    text-align: center;
+}
+
+.cuadros {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.cuadro {
+    background-color: #e9eef5;
+    padding: 20px;
+    width: 180px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.cuadro h3 {
+    margin-bottom: 10px;
+    color: #004080;
+}
+
+.cuadro p {
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+}
