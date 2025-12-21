@@ -6,27 +6,83 @@
     <title>Gestión de Eventos - Inicio</title>
     <link rel="stylesheet" href="css/estilos.css">
 </head>
+
 <body>
-    <header>
-        <h1>Sistema de Gestión de Eventos</h1>
-        <nav>
-            <ul>
-                <li><a href="eventos.html">Eventos</a></li>
-                <li><a href="ubicaciones.html">Ubicaciones</a></li>
-                <li><a href="contactos.html">Contactos</a></li>
-            </ul>
-        </nav>
-    </header>
+<header>
+    <h1>Sistema de Gestión de Eventos</h1>
+    <nav>
+        <ul>
+            <li><a href="eventos.html">Eventos</a></li>
+            <li><a href="ubicaciones.html">Ubicaciones</a></li>
+            <li><a href="contactos.html">Contactos</a></li>
+            <li><a href="ver_datos.html">Ver Datos</a></li>
+        </ul>
+    </nav>
+</header>
 
-    <main>
-        <section>
-            <h2>Bienvenido</h2>
-            <p>Este sistema permite registrar, gestionar y consultar eventos, ubicaciones y contactos de la institución educativa.</p>
-        </section>
-    </main>
+<main>
 
-    <footer>
-        <p>&copy; 2025 - Caso Práctico Interacción Hombre-Máquina</p>
-    </footer>
+<!-- BIENVENIDA -->
+<section>
+    <h2>Bienvenido</h2>
+    <p>
+        Este sistema permite registrar, gestionar y consultar eventos,
+        ubicaciones y contactos de la institución educativa.
+    </p>
+</section>
+
+<!-- PANEL RESUMEN -->
+<section class="panel-resumen">
+    <h2>Resumen del sistema</h2>
+
+    <div class="cuadros">
+        <div class="cuadro">
+            <h3>📅 Eventos</h3>
+            <p id="totalEventos">0</p>
+        </div>
+
+        <div class="cuadro">
+            <h3>📍 Ubicaciones</h3>
+            <p id="totalUbicaciones">0</p>
+        </div>
+
+        <div class="cuadro">
+            <h3>👤 Contactos</h3>
+            <p id="totalContactos">0</p>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer>
+    <p>&copy; 2025 - Caso Práctico Interacción Hombre-Máquina</p>
+</footer>
+
+<!-- FIREBASE -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCR9vM3HNZ0QyCpi0tLV-g865VQ53XcBP4",
+  authDomain: "gestion-eventos-steven.firebaseapp.com",
+  projectId: "gestion-eventos-steven"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// CONTADORES
+document.getElementById("totalEventos").innerText =
+  (await getDocs(collection(db, "eventos"))).size;
+
+document.getElementById("totalUbicaciones").innerText =
+  (await getDocs(collection(db, "ubicaciones"))).size;
+
+document.getElementById("totalContactos").innerText =
+  (await getDocs(collection(db, "contactos"))).size;
+</script>
+
 </body>
 </html>
