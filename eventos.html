@@ -8,6 +8,7 @@
 </head>
 
 <body>
+
 <header>
     <h1>Gestión de Eventos</h1>
     <nav>
@@ -21,32 +22,41 @@
 </header>
 
 <main>
+
+<!-- REGISTRO -->
 <section>
 <h2>Registrar nuevo evento</h2>
 
 <form id="formEvento">
-    <input type="text" id="titulo" name="titulo" placeholder="Título" required>
-    <input type="text" id="invitados" name="invitados" placeholder="Invitados">
-    <input type="date" id="fecha" name="fecha" required>
-    <input type="time" id="hora" name="hora" required>
-    <input type="text" id="zona" name="zona" placeholder="Zona horaria">
-    <textarea id="descripcion" name="descripcion" placeholder="Descripción"></textarea>
-    <input type="text" id="clasificacion" name="clasificacion" placeholder="Clasificación">
-    <input type="text" id="lugar" name="lugar" placeholder="Lugar">
+    <input id="titulo" placeholder="Título" required>
+    <input id="invitados" placeholder="Invitados">
+    <input type="date" id="fecha" required>
+    <input type="time" id="hora" required>
+    <input id="zona" placeholder="Zona horaria">
+    <textarea id="descripcion" placeholder="Descripción"></textarea>
+    <input id="clasificacion" placeholder="Clasificación">
+    <input id="lugar" placeholder="Lugar">
 
     <button type="button" onclick="guardarEvento()">Guardar Evento</button>
 </form>
 </section>
+
+<!-- LISTA -->
+<section>
+<h2>Lista de eventos</h2>
+<ul id="listaEventos"></ul>
+</section>
+
 </main>
 
 <footer>
 <p>&copy; 2025 - Caso Práctico Interacción Hombre-Máquina</p>
 </footer>
 
-<!-- FIREBASE -->
+<!-- 🔥 FIREBASE EVENTOS -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCR9vM3HNZ0QyCpi0tLV-g865VQ53XcBP4",
@@ -60,30 +70,49 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+/* GUARDAR EVENTO */
 window.guardarEvento = async function () {
-  try {
-    await addDoc(collection(db, "eventos"), {
-      titulo: document.getElementById("titulo").value,
-      invitados: document.getElementById("invitados").value,
-      fecha: document.getElementById("fecha").value,
-      hora: document.getElementById("hora").value,
-      zona: document.getElementById("zona").value,
-      descripcion: document.getElementById("descripcion").value,
-      clasificacion: document.getElementById("clasificacion").value,
-      lugar: document.getElementById("lugar").value,
-      creado: new Date()
-    });
+  await addDoc(collection(db, "eventos"), {
+    titulo: titulo.value,
+    invitados: invitados.value,
+    fecha: fecha.value,
+    hora: hora.value,
+    zona: zona.value,
+    descripcion: descripcion.value,
+    clasificacion: clasificacion.value,
+    lugar: lugar.value,
+    creado: new Date()
+  });
 
-    alert("✅ Evento guardado en Firebase");
-    document.getElementById("formEvento").reset();
-
-  } catch (error) {
-    alert("❌ Error al guardar el evento");
-    console.error(error);
-  }
+  alert("✅ Evento guardado");
+  document.getElementById("formEvento").reset();
+  cargarEventos();
 };
+
+/* MOSTRAR EVENTOS */
+async function cargarEventos() {
+  const lista = document.getElementById("listaEventos");
+  lista.innerHTML = "";
+
+  const querySnapshot = await getDocs(collection(db, "eventos"));
+  querySnapshot.forEach((doc) => {
+    const e = doc.data();
+    lista.innerHTML += `
+      <li>
+        <strong>${e.titulo}</strong><br>
+        🗓 ${e.fecha} ⏰ ${e.hora}<br>
+        📍 ${e.lugar || "-"}<br>
+        📝 ${e.descripcion || "-"}
+      </li><hr>
+    `;
+  });
+}
+
+/* CARGAR AL INICIAR */
+cargarEventos();
 </script>
 
 </body>
 </html>
+
 
