@@ -1,86 +1,23 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Ver Datos del Sistema</title>
-    <link rel="stylesheet" href="css/estilos.css">
+  <meta charset="UTF-8">
+  <title>Consulta de Datos</title>
+  <link rel="stylesheet" href="css/estilos.css">
 </head>
-
 <body>
 
-<header>
-    <h1>Datos Registrados en el Sistema</h1>
-    <nav>
-        <ul>
-            <li><a href="index.html">Inicio</a></li>
-            <li><a href="eventos.html">Eventos</a></li>
-            <li><a href="ubicaciones.html">Ubicaciones</a></li>
-            <li><a href="contactos.html">Contactos</a></li>
-        </ul>
-    </nav>
-</header>
+<h1>Consulta de Datos (Solo lectura)</h1>
 
-<main>
+<h2>📅 Eventos</h2>
+<ul id="listaEventos"></ul>
 
-<!-- ================= EVENTOS ================= -->
-<section>
-    <h2>📅 Eventos</h2>
-    <table class="tabla">
-        <thead>
-            <tr>
-                <th>Título</th>
-                <th>Invitados</th>
-                <th>Fecha</th>
-                <th>Hora</th>
-                <th>Lugar</th>
-            </tr>
-        </thead>
-        <tbody id="tablaEventos"></tbody>
-    </table>
-</section>
+<h2>📍 Ubicaciones</h2>
+<ul id="listaUbicaciones"></ul>
 
-<!-- ================= UBICACIONES ================= -->
-<section>
-    <h2>📍 Ubicaciones</h2>
-    <table class="tabla">
-        <thead>
-            <tr>
-                <th>Título</th>
-                <th>Dirección</th>
-                <th>Coordenadas</th>
-            </tr>
-        </thead>
-        <tbody id="tablaUbicaciones"></tbody>
-    </table>
-</section>
+<h2>👤 Contactos</h2>
+<ul id="listaContactos"></ul>
 
-<!-- ================= CONTACTOS ================= -->
-<section>
-    <h2>👤 Contactos</h2>
-    <table class="tabla">
-        <thead>
-            <tr>
-                <th>Saludo</th>
-                <th>Nombre</th>
-                <th>Cédula</th>
-                <th>Correo</th>
-                <th>Teléfono</th>
-            </tr>
-        </thead>
-        <tbody id="tablaContactos"></tbody>
-    </table>
-
-    <br>
-    <a href="index.html" class="btn-regresar">⬅ Regresar al inicio</a>
-</section>
-
-</main>
-
-<footer>
-    <p>&copy; 2025 - Gestión de Eventos</p>
-</footer>
-
-<!-- ================= FIREBASE ================= -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
@@ -97,46 +34,28 @@ const db = getFirestore(app);
 /* EVENTOS */
 const eventosSnap = await getDocs(collection(db, "eventos"));
 eventosSnap.forEach(doc => {
-    const e = doc.data();
-    document.getElementById("tablaEventos").innerHTML += `
-        <tr>
-            <td>${e.titulo || ""}</td>
-            <td>${e.invitados || ""}</td>
-            <td>${e.fecha || ""}</td>
-            <td>${e.hora || ""}</td>
-            <td>${e.lugar || ""}</td>
-        </tr>
-    `;
+  const e = doc.data();
+  document.getElementById("listaEventos").innerHTML +=
+    `<li>${e.titulo} - ${e.fecha} ${e.hora}</li>`;
 });
 
 /* UBICACIONES */
-const ubicacionesSnap = await getDocs(collection(db, "ubicaciones"));
-ubicacionesSnap.forEach(doc => {
-    const u = doc.data();
-    document.getElementById("tablaUbicaciones").innerHTML += `
-        <tr>
-            <td>${u.titulo || ""}</td>
-            <td>${u.direccion || ""}</td>
-            <td>${u.coordenadas || ""}</td>
-        </tr>
-    `;
+const ubicSnap = await getDocs(collection(db, "ubicaciones"));
+ubicSnap.forEach(doc => {
+  const u = doc.data();
+  document.getElementById("listaUbicaciones").innerHTML +=
+    `<li>${u.titulo} - ${u.direccion}</li>`;
 });
 
 /* CONTACTOS */
-const contactosSnap = await getDocs(collection(db, "contactos"));
-contactosSnap.forEach(doc => {
-    const c = doc.data();
-    document.getElementById("tablaContactos").innerHTML += `
-        <tr>
-            <td>${c.saludo || ""}</td>
-            <td>${c.nombre || ""}</td>
-            <td>${c.identificacion || ""}</td>
-            <td>${c.correo || ""}</td>
-            <td>${c.telefono || ""}</td>
-        </tr>
-    `;
+const contSnap = await getDocs(collection(db, "contactos"));
+contSnap.forEach(doc => {
+  const c = doc.data();
+  document.getElementById("listaContactos").innerHTML +=
+    `<li>${c.nombre} - ${c.email}</li>`;
 });
 </script>
 
 </body>
 </html>
+
