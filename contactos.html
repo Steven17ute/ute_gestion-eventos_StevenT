@@ -21,15 +21,18 @@
 </header>
 
 <main>
+
 <section>
     <h2>Registrar nuevo contacto</h2>
 
     <form id="formContacto">
+        <input id="saludo" placeholder="Saludo (Sr., Sra., Ing.)" required>
         <input id="nombre" placeholder="Nombre completo" required>
-        <input id="telefono" placeholder="Teléfono">
-        <input id="email" type="email" placeholder="Correo electrónico">
-        <input id="tipo" placeholder="Tipo (amigo, trabajo, familiar)">
-        
+        <input id="identificacion" placeholder="Número de identificación" required>
+        <input id="email" type="email" placeholder="Correo electrónico" required>
+        <input id="telefono" placeholder="Teléfono" required>
+        <input id="foto" placeholder="URL de la fotografía (opcional)">
+
         <button type="button" onclick="guardarContacto()">Guardar Contacto</button>
     </form>
 </section>
@@ -38,6 +41,7 @@
     <h2>Lista de contactos</h2>
     <ul id="listaContactos"></ul>
 </section>
+
 </main>
 
 <footer>
@@ -64,10 +68,12 @@ const db = getFirestore(app);
 /* GUARDAR CONTACTO */
 window.guardarContacto = async function () {
   await addDoc(collection(db, "contactos"), {
+    saludo: saludo.value,
     nombre: nombre.value,
-    telefono: telefono.value,
+    identificacion: identificacion.value,
     email: email.value,
-    tipo: tipo.value,
+    telefono: telefono.value,
+    foto: foto.value,
     creado: new Date()
   });
 
@@ -86,11 +92,13 @@ async function cargarContactos() {
     const c = doc.data();
     lista.innerHTML += `
       <li>
-        <strong>${c.nombre}</strong><br>
-        📞 ${c.telefono || "-"}<br>
-        📧 ${c.email || "-"}<br>
-        🏷️ ${c.tipo || "-"}
-      </li><hr>
+        <strong>${c.saludo} ${c.nombre}</strong><br>
+        🆔 ${c.identificacion}<br>
+        📧 ${c.email}<br>
+        📞 ${c.telefono}<br>
+        ${c.foto ? `<img src="${c.foto}" width="80">` : ""}
+      </li>
+      <hr>
     `;
   });
 }
@@ -100,3 +108,4 @@ cargarContactos();
 
 </body>
 </html>
+
