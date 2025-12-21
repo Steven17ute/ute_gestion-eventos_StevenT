@@ -2,28 +2,61 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Ver Contactos</title>
+    <title>Ver Datos del Sistema</title>
     <link rel="stylesheet" href="css/estilos.css">
 </head>
 
 <body>
 
 <header>
-    <h1>Contactos Registrados</h1>
+    <h1>Datos Registrados en el Sistema</h1>
     <nav>
         <ul>
             <li><a href="index.html">Inicio</a></li>
             <li><a href="eventos.html">Eventos</a></li>
             <li><a href="ubicaciones.html">Ubicaciones</a></li>
+            <li><a href="contactos.html">Contactos</a></li>
         </ul>
     </nav>
 </header>
 
 <main>
 
+<!-- ================= EVENTOS ================= -->
 <section>
-    <h2>Lista de contactos</h2>
+    <h2>📅 Eventos</h2>
+    <table class="tabla">
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Invitados</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Lugar</th>
+            </tr>
+        </thead>
+        <tbody id="tablaEventos"></tbody>
+    </table>
+</section>
 
+<!-- ================= UBICACIONES ================= -->
+<section>
+    <h2>📍 Ubicaciones</h2>
+    <table class="tabla">
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Dirección</th>
+                <th>Coordenadas</th>
+            </tr>
+        </thead>
+        <tbody id="tablaUbicaciones"></tbody>
+    </table>
+</section>
+
+<!-- ================= CONTACTOS ================= -->
+<section>
+    <h2>👤 Contactos</h2>
     <table class="tabla">
         <thead>
             <tr>
@@ -34,13 +67,11 @@
                 <th>Teléfono</th>
             </tr>
         </thead>
-        <tbody id="tablaContactos">
-            <!-- Firebase -->
-        </tbody>
+        <tbody id="tablaContactos"></tbody>
     </table>
 
     <br>
-    <a href="index.html" class="btn-regresar">⬅ Regresar</a>
+    <a href="index.html" class="btn-regresar">⬅ Regresar al inicio</a>
 </section>
 
 </main>
@@ -49,6 +80,7 @@
     <p>&copy; 2025 - Gestión de Eventos</p>
 </footer>
 
+<!-- ================= FIREBASE ================= -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
@@ -62,12 +94,39 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const tabla = document.getElementById("tablaContactos");
-const querySnapshot = await getDocs(collection(db, "contactos"));
+/* EVENTOS */
+const eventosSnap = await getDocs(collection(db, "eventos"));
+eventosSnap.forEach(doc => {
+    const e = doc.data();
+    document.getElementById("tablaEventos").innerHTML += `
+        <tr>
+            <td>${e.titulo || ""}</td>
+            <td>${e.invitados || ""}</td>
+            <td>${e.fecha || ""}</td>
+            <td>${e.hora || ""}</td>
+            <td>${e.lugar || ""}</td>
+        </tr>
+    `;
+});
 
-querySnapshot.forEach(doc => {
+/* UBICACIONES */
+const ubicacionesSnap = await getDocs(collection(db, "ubicaciones"));
+ubicacionesSnap.forEach(doc => {
+    const u = doc.data();
+    document.getElementById("tablaUbicaciones").innerHTML += `
+        <tr>
+            <td>${u.titulo || ""}</td>
+            <td>${u.direccion || ""}</td>
+            <td>${u.coordenadas || ""}</td>
+        </tr>
+    `;
+});
+
+/* CONTACTOS */
+const contactosSnap = await getDocs(collection(db, "contactos"));
+contactosSnap.forEach(doc => {
     const c = doc.data();
-    tabla.innerHTML += `
+    document.getElementById("tablaContactos").innerHTML += `
         <tr>
             <td>${c.saludo || ""}</td>
             <td>${c.nombre || ""}</td>
