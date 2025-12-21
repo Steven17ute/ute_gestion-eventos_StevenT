@@ -37,6 +37,20 @@
     <input id="clasificacion" placeholder="Clasificación">
     <input id="lugar" placeholder="Lugar">
 
+    <!-- ✅ CAMPOS QUE FALTABAN -->
+    <label>Repetición:</label>
+    <select id="repeticion">
+        <option value="Sin repetición">Sin repetición</option>
+        <option value="Diaria">Diaria</option>
+        <option value="Semanal">Semanal</option>
+        <option value="Mensual">Mensual</option>
+    </select>
+
+    <label>
+        <input type="checkbox" id="recordatorio">
+        Activar recordatorio
+    </label>
+
     <button type="button" onclick="guardarEvento()">Guardar Evento</button>
 </form>
 </section>
@@ -81,6 +95,8 @@ window.guardarEvento = async function () {
     descripcion: descripcion.value,
     clasificacion: clasificacion.value,
     lugar: lugar.value,
+    repeticion: repeticion.value,
+    recordatorio: recordatorio.checked ? "Sí" : "No",
     creado: new Date()
   });
 
@@ -102,8 +118,11 @@ async function cargarEventos() {
         <strong>${e.titulo}</strong><br>
         🗓 ${e.fecha} ⏰ ${e.hora}<br>
         📍 ${e.lugar || "-"}<br>
+        🔁 ${e.repeticion || "-"}<br>
+        ⏰ Recordatorio: ${e.recordatorio || "No"}<br>
         📝 ${e.descripcion || "-"}
-      </li><hr>
+      </li>
+      <hr>
     `;
   });
 }
@@ -114,5 +133,4 @@ cargarEventos();
 
 </body>
 </html>
-
 
