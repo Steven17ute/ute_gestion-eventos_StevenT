@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Consulta de Datos</title>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+<h1>Consulta de Datos (Solo lectura)</h1>
+
+<h2>📅 Eventos</h2>
+<ul id="listaEventos"></ul>
+
+<h2>📍 Ubicaciones</h2>
+<ul id="listaUbicaciones"></ul>
+
+<h2>👤 Contactos</h2>
+<ul id="listaContactos"></ul>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCR9vM3HNZ0QyCpi0tLV-g865VQ53XcBP4",
+  authDomain: "gestion-eventos-steven.firebaseapp.com",
+  projectId: "gestion-eventos-steven"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+/* EVENTOS */
+const eventosSnap = await getDocs(collection(db, "eventos"));
+eventosSnap.forEach(doc => {
+  const e = doc.data();
+  document.getElementById("listaEventos").innerHTML +=
+    `<li>${e.titulo} - ${e.fecha} ${e.hora}</li>`;
+});
+
+/* UBICACIONES */
+const ubicSnap = await getDocs(collection(db, "ubicaciones"));
+ubicSnap.forEach(doc => {
+  const u = doc.data();
+  document.getElementById("listaUbicaciones").innerHTML +=
+    `<li>${u.titulo} - ${u.direccion}</li>`;
+});
+
+/* CONTACTOS */
+const contSnap = await getDocs(collection(db, "contactos"));
+contSnap.forEach(doc => {
+  const c = doc.data();
+  document.getElementById("listaContactos").innerHTML +=
+    `<li>${c.nombre} - ${c.email}</li>`;
+});
+</script>
+
+</body>
+</html>
