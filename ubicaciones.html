@@ -8,6 +8,7 @@
 </head>
 
 <body>
+
 <header>
     <h1>Gestión de Ubicaciones</h1>
     <nav>
@@ -21,30 +22,27 @@
 </header>
 
 <main>
+
+<!-- REGISTRO -->
 <section>
 <h2>Registrar nueva ubicación</h2>
 
 <form id="formUbicacion">
-    <label>Título:</label>
-    <input type="text" id="tituloUbicacion" required>
-
-    <label>Dirección:</label>
-    <input type="text" id="direccion" required>
-
-    <label>Latitud:</label>
-    <input type="text" id="latitud" placeholder="-0.1807">
-
-    <label>Longitud:</label>
-    <input type="text" id="longitud" placeholder="-78.4678">
+    <input id="tituloUbicacion" placeholder="Título de la ubicación" required>
+    <input id="direccion" placeholder="Dirección" required>
+    <input id="latitud" placeholder="Latitud (ej: -0.1807)">
+    <input id="longitud" placeholder="Longitud (ej: -78.4678)">
 
     <button type="button" onclick="guardarUbicacion()">Guardar Ubicación</button>
 </form>
 </section>
 
+<!-- LISTA -->
 <section>
 <h2>Lista de ubicaciones</h2>
 <ul id="listaUbicaciones"></ul>
 </section>
+
 </main>
 
 <footer>
@@ -54,35 +52,55 @@
 <!-- 🔥 FIREBASE UBICACIONES -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCR9vM3HNZ0QyCpi0tLV-g865VQ53XcBP4",
   authDomain: "gestion-eventos-steven.firebaseapp.com",
-  projectId: "gestion-eventos-steven"
+  projectId: "gestion-eventos-steven",
+  storageBucket: "gestion-eventos-steven.firebasestorage.app",
+  messagingSenderId: "313497308958",
+  appId: "1:313497308958:web:f44475e174ab062ab7430f"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+/* GUARDAR UBICACIÓN */
 window.guardarUbicacion = async function () {
-  try {
-    await addDoc(collection(db, "ubicaciones"), {
-      titulo: document.getElementById("tituloUbicacion").value,
-      direccion: document.getElementById("direccion").value,
-      latitud: document.getElementById("latitud").value,
-      longitud: document.getElementById("longitud").value,
-      creado: Date.now()
-    });
+  await addDoc(collection(db, "ubicaciones"), {
+    titulo: tituloUbicacion.value,
+    direccion: direccion.value,
+    latitud: latitud.value,
+    longitud: longitud.value,
+    creado: new Date()
+  });
 
-    alert("📍 Ubicación guardada en Firebase");
-    document.getElementById("formUbicacion").reset();
-
-  } catch (error) {
-    alert("❌ Error al guardar la ubicación");
-    console.error(error);
-  }
+  alert("📍 Ubicación guardada");
+  document.getElementById("formUbicacion").reset();
+  cargarUbicaciones();
 };
+
+/* MOSTRAR UBICACIONES */
+async function cargarUbicaciones() {
+  const lista = document.getElementById("listaUbicaciones");
+  lista.innerHTML = "";
+
+  const querySnapshot = await getDocs(collection(db, "ubicaciones"));
+  querySnapshot.forEach((doc) => {
+    const u = doc.data();
+    lista.innerHTML += `
+      <li>
+        <strong>${u.titulo}</strong><br>
+        📍 ${u.direccion}<br>
+        🌐 ${u.latitud || "-"}, ${u.longitud || "-"}
+      </li><hr>
+    `;
+  });
+}
+
+/* CARGAR AL INICIAR */
+cargarUbicaciones();
 </script>
 
 </body>
