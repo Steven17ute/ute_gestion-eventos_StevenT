@@ -5,76 +5,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Eventos</title>
     <link rel="stylesheet" href="css/estilos.css">
-    <script src="js/funciones.js" defer></script>
 </head>
+
 <body>
-    <header>
-        <h1>Gestión de Eventos</h1>
-        <nav>
-            <ul>
-                <li><a href="index.html">Inicio</a></li>
-                <li><a href="eventos.html">Eventos</a></li>
-                <li><a href="ubicaciones.html">Ubicaciones</a></li>
-                <li><a href="contactos.html">Contactos</a></li>
-            </ul>
-        </nav>
-    </header>
+<header>
+    <h1>Gestión de Eventos</h1>
+    <nav>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="eventos.html">Eventos</a></li>
+            <li><a href="ubicaciones.html">Ubicaciones</a></li>
+            <li><a href="contactos.html">Contactos</a></li>
+        </ul>
+    </nav>
+</header>
 
-    <main>
-        <!-- Formulario para registrar un evento -->
-        <section>
-            <h2>Registrar nuevo evento</h2>
-            <form id="formEvento">
-                <label for="titulo">Título:</label>
-                <input type="text" id="titulo" name="titulo" required>
+<main>
+<section>
+<h2>Registrar nuevo evento</h2>
 
-                <label for="invitados">Invitados:</label>
-                <input type="text" id="invitados" name="invitados">
+<form id="formEvento">
+    <input type="text" id="titulo" name="titulo" placeholder="Título" required>
+    <input type="text" id="invitados" name="invitados" placeholder="Invitados">
+    <input type="date" id="fecha" name="fecha" required>
+    <input type="time" id="hora" name="hora" required>
+    <input type="text" id="zona" name="zona" placeholder="Zona horaria">
+    <textarea id="descripcion" name="descripcion" placeholder="Descripción"></textarea>
+    <input type="text" id="clasificacion" name="clasificacion" placeholder="Clasificación">
+    <input type="text" id="lugar" name="lugar" placeholder="Lugar">
 
-                <label for="fecha">Fecha:</label>
-                <input type="date" id="fecha" name="fecha" required>
+    <button type="button" onclick="guardarEvento()">Guardar Evento</button>
+</form>
+</section>
+</main>
 
-                <label for="hora">Hora:</label>
-                <input type="time" id="hora" name="hora" required>
+<footer>
+<p>&copy; 2025 - Caso Práctico Interacción Hombre-Máquina</p>
+</footer>
 
-                <label for="zona">Zona horaria:</label>
-                <input type="text" id="zona" name="zona">
+<!-- FIREBASE -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-                <label for="descripcion">Descripción:</label>
-                <textarea id="descripcion" name="descripcion"></textarea>
+const firebaseConfig = {
+  apiKey: "AIzaSyCR9vM3HNZ0QyCpi0tLV-g865VQ53XcBP4",
+  authDomain: "gestion-eventos-steven.firebaseapp.com",
+  projectId: "gestion-eventos-steven",
+  storageBucket: "gestion-eventos-steven.firebasestorage.app",
+  messagingSenderId: "313497308958",
+  appId: "1:313497308958:web:f44475e174ab062ab7430f"
+};
 
-                <label for="repeticion">Repetición:</label>
-                <select id="repeticion" name="repeticion">
-                    <option value="ninguna">Ninguna</option>
-                    <option value="diaria">Diaria</option>
-                    <option value="semanal">Semanal</option>
-                    <option value="mensual">Mensual</option>
-                </select>
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-                <label for="recordatorio">Recordatorio:</label>
-                <input type="checkbox" id="recordatorio" name="recordatorio"> Activar
+window.guardarEvento = async function () {
+  try {
+    await addDoc(collection(db, "eventos"), {
+      titulo: document.getElementById("titulo").value,
+      invitados: document.getElementById("invitados").value,
+      fecha: document.getElementById("fecha").value,
+      hora: document.getElementById("hora").value,
+      zona: document.getElementById("zona").value,
+      descripcion: document.getElementById("descripcion").value,
+      clasificacion: document.getElementById("clasificacion").value,
+      lugar: document.getElementById("lugar").value,
+      creado: new Date()
+    });
 
-                <label for="clasificacion">Clasificación:</label>
-                <input type="text" id="clasificacion" name="clasificacion">
+    alert("✅ Evento guardado en Firebase");
+    document.getElementById("formEvento").reset();
 
-                <label for="lugar">Lugar:</label>
-                <input type="text" id="lugar" name="lugar">
+  } catch (error) {
+    alert("❌ Error al guardar el evento");
+    console.error(error);
+  }
+};
+</script>
 
-                <button type="submit">Guardar Evento</button>
-            </form>
-        </section>
-
-        <!-- Lista de eventos registrados -->
-        <section>
-            <h2>Lista de eventos</h2>
-            <ul id="listaEventos">
-                <!-- Aquí se mostrarán los eventos registrados -->
-            </ul>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2025 - Caso Práctico Interacción Hombre-Máquina</p>
-    </footer>
 </body>
 </html>
+

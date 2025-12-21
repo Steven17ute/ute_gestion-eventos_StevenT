@@ -5,64 +5,98 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Contactos</title>
     <link rel="stylesheet" href="css/estilos.css">
-    <script src="js/funciones.js" defer></script>
 </head>
 <body>
-    <header>
-        <h1>Gestión de Contactos</h1>
-        <nav>
-            <ul>
-                <li><a href="index.html">Inicio</a></li>
-                <li><a href="eventos.html">Eventos</a></li>
-                <li><a href="ubicaciones.html">Ubicaciones</a></li>
-                <li><a href="contactos.html">Contactos</a></li>
-            </ul>
-        </nav>
-    </header>
 
-    <main>
-        <!-- Formulario para registrar un contacto -->
-        <section>
-            <h2>Registrar nuevo contacto</h2>
-            <form id="formContacto">
-                <label for="saludo">Saludo:</label>
-                <select id="saludo" name="saludo">
-                    <option value="Sr.">Sr.</option>
-                    <option value="Sra.">Sra.</option>
-                    <option value="Dr.">Dr.</option>
-                    <option value="Lic.">Lic.</option>
-                </select>
+<header>
+    <h1>Gestión de Contactos</h1>
+    <nav>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="eventos.html">Eventos</a></li>
+            <li><a href="ubicaciones.html">Ubicaciones</a></li>
+            <li><a href="contactos.html">Contactos</a></li>
+        </ul>
+    </nav>
+</header>
 
-                <label for="nombre">Nombre completo:</label>
-                <input type="text" id="nombre" name="nombre" required>
+<main>
+<section>
+    <h2>Registrar nuevo contacto</h2>
 
-                <label for="identificacion">Número de identificación:</label>
-                <input type="text" id="identificacion" name="identificacion" required>
+    <form id="formContacto">
+        <input id="nombre" placeholder="Nombre completo" required>
+        <input id="telefono" placeholder="Teléfono">
+        <input id="email" type="email" placeholder="Correo electrónico">
+        <input id="tipo" placeholder="Tipo (amigo, trabajo, familiar)">
+        
+        <button type="button" onclick="guardarContacto()">Guardar Contacto</button>
+    </form>
+</section>
 
-                <label for="correo">Correo electrónico:</label>
-                <input type="email" id="correo" name="correo" required>
+<section>
+    <h2>Lista de contactos</h2>
+    <ul id="listaContactos"></ul>
+</section>
+</main>
 
-                <label for="telefono">Número de teléfono:</label>
-                <input type="tel" id="telefono" name="telefono">
+<footer>
+    <p>&copy; 2025 - Caso Práctico Interacción Hombre-Máquina</p>
+</footer>
 
-                <label for="foto">Fotografía:</label>
-                <input type="file" id="foto" name="foto" accept="image/*">
+<!-- 🔥 FIREBASE CONTACTOS -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-                <button type="submit">Guardar Contacto</button>
-            </form>
-        </section>
+const firebaseConfig = {
+  apiKey: "AIzaSyCR9vM3HNZ0QyCpi0tLV-g865VQ53XcBP4",
+  authDomain: "gestion-eventos-steven.firebaseapp.com",
+  projectId: "gestion-eventos-steven",
+  storageBucket: "gestion-eventos-steven.firebasestorage.app",
+  messagingSenderId: "313497308958",
+  appId: "1:313497308958:web:f44475e174ab062ab7430f"
+};
 
-        <!-- Lista de contactos registrados -->
-        <section>
-            <h2>Lista de contactos</h2>
-            <ul id="listaContactos">
-                <!-- Aquí se mostrarán los contactos registrados -->
-            </ul>
-        </section>
-    </main>
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-    <footer>
-        <p>&copy; 2025 - Caso Práctico Interacción Hombre-Máquina</p>
-    </footer>
+/* GUARDAR CONTACTO */
+window.guardarContacto = async function () {
+  await addDoc(collection(db, "contactos"), {
+    nombre: nombre.value,
+    telefono: telefono.value,
+    email: email.value,
+    tipo: tipo.value,
+    creado: new Date()
+  });
+
+  alert("✅ Contacto guardado");
+  document.getElementById("formContacto").reset();
+  cargarContactos();
+};
+
+/* MOSTRAR CONTACTOS */
+async function cargarContactos() {
+  const lista = document.getElementById("listaContactos");
+  lista.innerHTML = "";
+
+  const querySnapshot = await getDocs(collection(db, "contactos"));
+  querySnapshot.forEach((doc) => {
+    const c = doc.data();
+    lista.innerHTML += `
+      <li>
+        <strong>${c.nombre}</strong><br>
+        📞 ${c.telefono || "-"}<br>
+        📧 ${c.email || "-"}<br>
+        🏷️ ${c.tipo || "-"}
+      </li><hr>
+    `;
+  });
+}
+
+cargarContactos();
+</script>
+
 </body>
 </html>

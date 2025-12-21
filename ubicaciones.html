@@ -5,50 +5,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Ubicaciones</title>
     <link rel="stylesheet" href="css/estilos.css">
-    <script src="js/funciones.js" defer></script>
 </head>
+
 <body>
-    <header>
-        <h1>Gestión de Ubicaciones</h1>
-        <nav>
-            <ul>
-                <li><a href="index.html">Inicio</a></li>
-                <li><a href="eventos.html">Eventos</a></li>
-                <li><a href="ubicaciones.html">Ubicaciones</a></li>
-                <li><a href="contactos.html">Contactos</a></li>
-            </ul>
-        </nav>
-    </header>
+<header>
+    <h1>Gestión de Ubicaciones</h1>
+    <nav>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="eventos.html">Eventos</a></li>
+            <li><a href="ubicaciones.html">Ubicaciones</a></li>
+            <li><a href="contactos.html">Contactos</a></li>
+        </ul>
+    </nav>
+</header>
 
-    <main>
-        <!-- Formulario para registrar una ubicación -->
-        <section>
-            <h2>Registrar nueva ubicación</h2>
-            <form id="formUbicacion">
-                <label for="titulo">Título:</label>
-                <input type="text" id="titulo" name="titulo" required>
+<main>
+<section>
+<h2>Registrar nueva ubicación</h2>
 
-                <label for="direccion">Dirección:</label>
-                <input type="text" id="direccion" name="direccion" required>
+<form id="formUbicacion">
+    <label>Título:</label>
+    <input type="text" id="tituloUbicacion" required>
 
-                <label for="coordenadas">Coordenadas geográficas:</label>
-                <input type="text" id="coordenadas" name="coordenadas" placeholder="Ej: -0.1807, -78.4678">
+    <label>Dirección:</label>
+    <input type="text" id="direccion" required>
 
-                <button type="submit">Guardar Ubicación</button>
-            </form>
-        </section>
+    <label>Latitud:</label>
+    <input type="text" id="latitud" placeholder="-0.1807">
 
-        <!-- Lista de ubicaciones registradas -->
-        <section>
-            <h2>Lista de ubicaciones</h2>
-            <ul id="listaUbicaciones">
-                <!-- Aquí se mostrarán las ubicaciones registradas -->
-            </ul>
-        </section>
-    </main>
+    <label>Longitud:</label>
+    <input type="text" id="longitud" placeholder="-78.4678">
 
-    <footer>
-        <p>&copy; 2025 - Caso Práctico Interacción Hombre-Máquina</p>
-    </footer>
+    <button type="button" onclick="guardarUbicacion()">Guardar Ubicación</button>
+</form>
+</section>
+
+<section>
+<h2>Lista de ubicaciones</h2>
+<ul id="listaUbicaciones"></ul>
+</section>
+</main>
+
+<footer>
+<p>&copy; 2025 - Caso Práctico Interacción Hombre-Máquina</p>
+</footer>
+
+<!-- 🔥 FIREBASE UBICACIONES -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCR9vM3HNZ0QyCpi0tLV-g865VQ53XcBP4",
+  authDomain: "gestion-eventos-steven.firebaseapp.com",
+  projectId: "gestion-eventos-steven"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+window.guardarUbicacion = async function () {
+  try {
+    await addDoc(collection(db, "ubicaciones"), {
+      titulo: document.getElementById("tituloUbicacion").value,
+      direccion: document.getElementById("direccion").value,
+      latitud: document.getElementById("latitud").value,
+      longitud: document.getElementById("longitud").value,
+      creado: Date.now()
+    });
+
+    alert("📍 Ubicación guardada en Firebase");
+    document.getElementById("formUbicacion").reset();
+
+  } catch (error) {
+    alert("❌ Error al guardar la ubicación");
+    console.error(error);
+  }
+};
+</script>
+
 </body>
 </html>
