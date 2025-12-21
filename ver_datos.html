@@ -1,22 +1,53 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Consulta de Datos</title>
-  <link rel="stylesheet" href="css/estilos.css">
+    <meta charset="UTF-8">
+    <title>Ver Contactos</title>
+    <link rel="stylesheet" href="css/estilos.css">
 </head>
+
 <body>
 
-<h1>Consulta de Datos (Solo lectura)</h1>
+<header>
+    <h1>Contactos Registrados</h1>
+    <nav>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="eventos.html">Eventos</a></li>
+            <li><a href="ubicaciones.html">Ubicaciones</a></li>
+        </ul>
+    </nav>
+</header>
 
-<h2>📅 Eventos</h2>
-<ul id="listaEventos"></ul>
+<main>
 
-<h2>📍 Ubicaciones</h2>
-<ul id="listaUbicaciones"></ul>
+<section>
+    <h2>Lista de contactos</h2>
 
-<h2>👤 Contactos</h2>
-<ul id="listaContactos"></ul>
+    <table class="tabla">
+        <thead>
+            <tr>
+                <th>Saludo</th>
+                <th>Nombre</th>
+                <th>Cédula</th>
+                <th>Correo</th>
+                <th>Teléfono</th>
+            </tr>
+        </thead>
+        <tbody id="tablaContactos">
+            <!-- Firebase -->
+        </tbody>
+    </table>
+
+    <br>
+    <a href="index.html" class="btn-regresar">⬅ Regresar</a>
+</section>
+
+</main>
+
+<footer>
+    <p>&copy; 2025 - Gestión de Eventos</p>
+</footer>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
@@ -31,28 +62,20 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-/* EVENTOS */
-const eventosSnap = await getDocs(collection(db, "eventos"));
-eventosSnap.forEach(doc => {
-  const e = doc.data();
-  document.getElementById("listaEventos").innerHTML +=
-    `<li>${e.titulo} - ${e.fecha} ${e.hora}</li>`;
-});
+const tabla = document.getElementById("tablaContactos");
+const querySnapshot = await getDocs(collection(db, "contactos"));
 
-/* UBICACIONES */
-const ubicSnap = await getDocs(collection(db, "ubicaciones"));
-ubicSnap.forEach(doc => {
-  const u = doc.data();
-  document.getElementById("listaUbicaciones").innerHTML +=
-    `<li>${u.titulo} - ${u.direccion}</li>`;
-});
-
-/* CONTACTOS */
-const contSnap = await getDocs(collection(db, "contactos"));
-contSnap.forEach(doc => {
-  const c = doc.data();
-  document.getElementById("listaContactos").innerHTML +=
-    `<li>${c.nombre} - ${c.email}</li>`;
+querySnapshot.forEach(doc => {
+    const c = doc.data();
+    tabla.innerHTML += `
+        <tr>
+            <td>${c.saludo || ""}</td>
+            <td>${c.nombre || ""}</td>
+            <td>${c.identificacion || ""}</td>
+            <td>${c.correo || ""}</td>
+            <td>${c.telefono || ""}</td>
+        </tr>
+    `;
 });
 </script>
 
