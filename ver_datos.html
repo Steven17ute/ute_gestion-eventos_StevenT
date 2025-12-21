@@ -5,19 +5,39 @@
   <title>Consulta de Datos</title>
   <link rel="stylesheet" href="css/estilos.css">
 </head>
+
 <body>
 
-<h1>Consulta de Datos (Solo lectura)</h1>
+<header>
+  <h1>Consulta de Datos (Solo lectura)</h1>
+</header>
 
-<h2>📅 Eventos</h2>
-<ul id="listaEventos"></ul>
+<main>
 
-<h2>📍 Ubicaciones</h2>
-<ul id="listaUbicaciones"></ul>
+<section>
+  <h2>📅 Eventos</h2>
+  <ul id="listaEventos"></ul>
+</section>
 
-<h2>👤 Contactos</h2>
-<ul id="listaContactos"></ul>
+<section>
+  <h2>📍 Ubicaciones</h2>
+  <ul id="listaUbicaciones"></ul>
+</section>
 
+<section>
+  <h2>👤 Contactos</h2>
+  <ul id="listaContactos"></ul>
+</section>
+
+<a href="index.html" class="btn-regresar">← Regresar</a>
+
+</main>
+
+<footer>
+  <p>&copy; 2025 - Gestión de Eventos</p>
+</footer>
+
+<!-- 🔥 FIREBASE -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
@@ -35,24 +55,43 @@ const db = getFirestore(app);
 const eventosSnap = await getDocs(collection(db, "eventos"));
 eventosSnap.forEach(doc => {
   const e = doc.data();
-  document.getElementById("listaEventos").innerHTML +=
-    `<li>${e.titulo} - ${e.fecha} ${e.hora}</li>`;
+  listaEventos.innerHTML += `
+    <li>
+      <strong>${e.titulo}</strong><br>
+      📅 ${e.fecha} ⏰ ${e.hora}<br>
+      📍 ${e.lugar || "-"}
+    </li>
+    <hr>
+  `;
 });
 
 /* UBICACIONES */
 const ubicSnap = await getDocs(collection(db, "ubicaciones"));
 ubicSnap.forEach(doc => {
   const u = doc.data();
-  document.getElementById("listaUbicaciones").innerHTML +=
-    `<li>${u.titulo} - ${u.direccion}</li>`;
+  listaUbicaciones.innerHTML += `
+    <li>
+      <strong>${u.titulo}</strong><br>
+      📍 ${u.direccion}<br>
+      🌍 ${u.latitud || "-"}, ${u.longitud || "-"}
+    </li>
+    <hr>
+  `;
 });
 
 /* CONTACTOS */
 const contSnap = await getDocs(collection(db, "contactos"));
 contSnap.forEach(doc => {
   const c = doc.data();
-  document.getElementById("listaContactos").innerHTML +=
-    `<li>${c.nombre} - ${c.email}</li>`;
+  listaContactos.innerHTML += `
+    <li>
+      <strong>${c.nombre}</strong><br>
+      📞 ${c.telefono || "-"}<br>
+      📧 ${c.email || "-"}<br>
+      🏷️ ${c.tipo || "-"}
+    </li>
+    <hr>
+  `;
 });
 </script>
 
