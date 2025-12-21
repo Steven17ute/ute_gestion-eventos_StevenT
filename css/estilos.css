@@ -103,4 +103,34 @@ footer {
     background-color: #004080;
     color: white;
 /*-------------------------
+    ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  padding: 10px 0;
+}
+
+hr {
+  border: none;
+  border-bottom: 1px solid #ccc;
+}
+
+section {
+  background: white;
+  padding: 20px;
+  margin-bottom: 30px;
+  border-radius: 8px;
+}
+
+.btn-regresar {
+  display: inline-block;
+  padding: 10px 15px;
+  background: #0b3c6d;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
 
