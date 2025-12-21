@@ -15,47 +15,18 @@
 <main>
 
 <section>
-<h2>📅 Eventos</h2>
-<table>
-  <thead>
-    <tr>
-      <th>Título</th>
-      <th>Fecha</th>
-      <th>Hora</th>
-      <th>Lugar</th>
-    </tr>
-  </thead>
-  <tbody id="tablaEventos"></tbody>
-</table>
+  <h2>📅 Eventos</h2>
+  <ul id="listaEventos"></ul>
 </section>
 
 <section>
-<h2>📍 Ubicaciones</h2>
-<table>
-  <thead>
-    <tr>
-      <th>Título</th>
-      <th>Dirección</th>
-      <th>Coordenadas</th>
-    </tr>
-  </thead>
-  <tbody id="tablaUbicaciones"></tbody>
-</table>
+  <h2>📍 Ubicaciones</h2>
+  <ul id="listaUbicaciones"></ul>
 </section>
 
 <section>
-<h2>👤 Contactos</h2>
-<table>
-  <thead>
-    <tr>
-      <th>Nombre</th>
-      <th>Teléfono</th>
-      <th>Correo</th>
-      <th>Tipo</th>
-    </tr>
-  </thead>
-  <tbody id="tablaContactos"></tbody>
-</table>
+  <h2>👤 Contactos</h2>
+  <ul id="listaContactos"></ul>
 </section>
 
 <a href="index.html" class="btn-regresar">← Regresar</a>
@@ -84,13 +55,13 @@ const db = getFirestore(app);
 const eventosSnap = await getDocs(collection(db, "eventos"));
 eventosSnap.forEach(doc => {
   const e = doc.data();
-  tablaEventos.innerHTML += `
-    <tr>
-      <td>${e.titulo}</td>
-      <td>${e.fecha}</td>
-      <td>${e.hora}</td>
-      <td>${e.lugar || "-"}</td>
-    </tr>
+  listaEventos.innerHTML += `
+    <li>
+      <strong>${e.titulo}</strong><br>
+      📅 ${e.fecha} ⏰ ${e.hora}<br>
+      📍 ${e.lugar || "-"}
+    </li>
+    <hr>
   `;
 });
 
@@ -98,12 +69,13 @@ eventosSnap.forEach(doc => {
 const ubicSnap = await getDocs(collection(db, "ubicaciones"));
 ubicSnap.forEach(doc => {
   const u = doc.data();
-  tablaUbicaciones.innerHTML += `
-    <tr>
-      <td>${u.titulo}</td>
-      <td>${u.direccion}</td>
-      <td>${u.latitud || "-"}, ${u.longitud || "-"}</td>
-    </tr>
+  listaUbicaciones.innerHTML += `
+    <li>
+      <strong>${u.titulo}</strong><br>
+      📍 ${u.direccion}<br>
+      🌍 ${u.latitud || "-"}, ${u.longitud || "-"}
+    </li>
+    <hr>
   `;
 });
 
@@ -111,13 +83,14 @@ ubicSnap.forEach(doc => {
 const contSnap = await getDocs(collection(db, "contactos"));
 contSnap.forEach(doc => {
   const c = doc.data();
-  tablaContactos.innerHTML += `
-    <tr>
-      <td>${c.nombre}</td>
-      <td>${c.telefono || "-"}</td>
-      <td>${c.email || "-"}</td>
-      <td>${c.tipo || "-"}</td>
-    </tr>
+  listaContactos.innerHTML += `
+    <li>
+      <strong>${c.nombre}</strong><br>
+      📞 ${c.telefono || "-"}<br>
+      📧 ${c.email || "-"}<br>
+      🏷️ ${c.tipo || "-"}
+    </li>
+    <hr>
   `;
 });
 </script>
