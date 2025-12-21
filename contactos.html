@@ -21,17 +21,18 @@
 </header>
 
 <main>
-
 <section>
     <h2>Registrar nuevo contacto</h2>
 
     <form id="formContacto">
-        <input id="saludo" placeholder="Saludo (Sr., Sra., Ing.)" required>
+        <input id="saludo" placeholder="Saludo (Sr., Sra., Ing.)">
         <input id="nombre" placeholder="Nombre completo" required>
-        <input id="identificacion" placeholder="Número de identificación" required>
-        <input id="email" type="email" placeholder="Correo electrónico" required>
-        <input id="telefono" placeholder="Teléfono" required>
-        <input id="foto" placeholder="URL de la fotografía (opcional)">
+        <input id="identificacion" placeholder="Número de identificación">
+        <input id="telefono" placeholder="Teléfono">
+        <input id="email" type="email" placeholder="Correo electrónico">
+
+        <label>Fotografía:</label>
+        <input type="file" id="foto" accept="image/*">
 
         <button type="button" onclick="guardarContacto()">Guardar Contacto</button>
     </form>
@@ -41,7 +42,6 @@
     <h2>Lista de contactos</h2>
     <ul id="listaContactos"></ul>
 </section>
-
 </main>
 
 <footer>
@@ -52,34 +52,52 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } 
+from "https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCR9vM3HNZ0QyCpi0tLV-g865VQ53XcBP4",
   authDomain: "gestion-eventos-steven.firebaseapp.com",
   projectId: "gestion-eventos-steven",
-  storageBucket: "gestion-eventos-steven.firebasestorage.app",
+  storageBucket: "gestion-eventos-steven.appspot.com",
   messagingSenderId: "313497308958",
   appId: "1:313497308958:web:f44475e174ab062ab7430f"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const storage = getStorage(app);
 
 /* GUARDAR CONTACTO */
 window.guardarContacto = async function () {
-  await addDoc(collection(db, "contactos"), {
-    saludo: saludo.value,
-    nombre: nombre.value,
-    identificacion: identificacion.value,
-    email: email.value,
-    telefono: telefono.value,
-    foto: foto.value,
-    creado: new Date()
-  });
+  try {
+    let fotoURL = "";
 
-  alert("✅ Contacto guardado");
-  document.getElementById("formContacto").reset();
-  cargarContactos();
+    const file = document.getElementById("foto").files[0];
+    if (file) {
+      const storageRef = ref(storage, `contactos/${Date.now()}_${file.name}`);
+      await uploadBytes(storageRef, file);
+      fotoURL = await getDownloadURL(storageRef);
+    }
+
+    await addDoc(collection(db, "contactos"), {
+      saludo: saludo.value,
+      nombre: nombre.value,
+      identificacion: identificacion.value,
+      telefono: telefono.value,
+      email: email.value,
+      foto: fotoURL,
+      creado: new Date()
+    });
+
+    alert("✅ Contacto guardado correctamente");
+    document.getElementById("formContacto").reset();
+    cargarContactos();
+
+  } catch (error) {
+    console.error(error);
+    alert("❌ Error al guardar contacto");
+  }
 };
 
 /* MOSTRAR CONTACTOS */
@@ -92,13 +110,12 @@ async function cargarContactos() {
     const c = doc.data();
     lista.innerHTML += `
       <li>
-        <strong>${c.saludo} ${c.nombre}</strong><br>
-        🆔 ${c.identificacion}<br>
-        📧 ${c.email}<br>
-        📞 ${c.telefono}<br>
+        <strong>${c.saludo || ""} ${c.nombre}</strong><br>
+        🆔 ${c.identificacion || "-"}<br>
+        📞 ${c.telefono || "-"}<br>
+        📧 ${c.email || "-"}<br>
         ${c.foto ? `<img src="${c.foto}" width="80">` : ""}
-      </li>
-      <hr>
+      </li><hr>
     `;
   });
 }
@@ -108,4 +125,5 @@ cargarContactos();
 
 </body>
 </html>
+
 
