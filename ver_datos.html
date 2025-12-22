@@ -2,28 +2,31 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Consulta de Datos</title>
+  <title>Consulta y Gestión de Datos</title>
   <link rel="stylesheet" href="css/estilos.css">
 </head>
 
 <body>
 
 <header>
-  <h1>Consulta de Datos (Solo lectura)</h1>
+  <h1>Consulta y Gestión de Datos</h1>
 </header>
 
 <main>
 
+<!-- EVENTOS -->
 <section>
   <h2>📅 Eventos</h2>
   <ul id="listaEventos"></ul>
 </section>
 
+<!-- UBICACIONES -->
 <section>
   <h2>📍 Ubicaciones</h2>
   <ul id="listaUbicaciones"></ul>
 </section>
 
+<!-- CONTACTOS -->
 <section>
   <h2>👤 Contactos</h2>
   <ul id="listaContactos"></ul>
@@ -40,7 +43,14 @@
 <!-- 🔥 FIREBASE -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  deleteDoc,
+  updateDoc,
+  doc
+} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCR9vM3HNZ0QyCpi0tLV-g865VQ53XcBP4",
@@ -51,52 +61,91 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-/* EVENTOS */
+/* ================= EVENTOS ================= */
 const eventosSnap = await getDocs(collection(db, "eventos"));
-eventosSnap.forEach(doc => {
-  const e = doc.data();
+eventosSnap.forEach(d => {
+  const e = d.data();
   listaEventos.innerHTML += `
     <li>
       <strong>${e.titulo}</strong><br>
       📅 ${e.fecha} ⏰ ${e.hora}<br>
-      📍 ${e.lugar || "-"}
+      📍 ${e.lugar || "-"}<br>
+
+      <button onclick="editarEvento('${d.id}', '${e.titulo}')">✏️ Editar</button>
+      <button onclick="eliminarEvento('${d.id}')">🗑️ Eliminar</button>
     </li>
     <hr>
   `;
 });
 
-/* UBICACIONES */
+window.eliminarEvento = async function(id) {
+  if (confirm("¿Eliminar este evento?")) {
+    await deleteDoc(doc(db, "eventos", id));
+    alert("✅ Evento eliminado");
+    location.reload();
+  }
+};
+
+window.editarEvento = async function(id, tituloActual) {
+  const nuevoTitulo = prompt("Editar título del evento:", tituloActual);
+  if (nuevoTitulo) {
+    await updateDoc(doc(db, "eventos", id), { titulo: nuevoTitulo });
+    alert("✏️ Evento actualizado");
+    location.reload();
+  }
+};
+
+/* ================= UBICACIONES ================= */
 const ubicSnap = await getDocs(collection(db, "ubicaciones"));
-ubicSnap.forEach(doc => {
-  const u = doc.data();
+ubicSnap.forEach(d => {
+  const u = d.data();
   listaUbicaciones.innerHTML += `
     <li>
       <strong>${u.titulo}</strong><br>
       📍 ${u.direccion}<br>
-      🌍 ${u.latitud || "-"}, ${u.longitud || "-"}
+      🌍 ${u.latitud || "-"}, ${u.longitud || "-"}<br>
+
+      <button onclick="eliminarUbicacion('${d.id}')">🗑️ Eliminar</button>
     </li>
     <hr>
   `;
 });
 
-/* CONTACTOS */
+window.eliminarUbicacion = async function(id) {
+  if (confirm("¿Eliminar esta ubicación?")) {
+    await deleteDoc(doc(db, "ubicaciones", id));
+    alert("✅ Ubicación eliminada");
+    location.reload();
+  }
+};
+
+/* ================= CONTACTOS ================= */
 const contSnap = await getDocs(collection(db, "contactos"));
-contSnap.forEach(doc => {
-  const c = doc.data();
+contSnap.forEach(d => {
+  const c = d.data();
   listaContactos.innerHTML += `
     <li>
       <strong>${c.nombre}</strong><br>
       📞 ${c.telefono || "-"}<br>
       📧 ${c.email || "-"}<br>
-      🏷️ ${c.tipo || "-"}
+      🏷️ ${c.tipo || "-"}<br>
+
+      <button onclick="eliminarContacto('${d.id}')">🗑️ Eliminar</button>
     </li>
     <hr>
   `;
 });
+
+window.eliminarContacto = async function(id) {
+  if (confirm("¿Eliminar este contacto?")) {
+    await deleteDoc(doc(db, "contactos", id));
+    alert("✅ Contacto eliminado");
+    location.reload();
+  }
+};
 </script>
 
 </body>
 </html>
-
 
 
