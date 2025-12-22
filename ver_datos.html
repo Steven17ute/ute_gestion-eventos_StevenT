@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Consulta y Gestión de Datos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="css/estilos.css">
 </head>
 
@@ -14,19 +15,19 @@
 
 <main>
 
-<!-- EVENTOS -->
+<!-- ================= EVENTOS ================= -->
 <section>
   <h2>📅 Eventos</h2>
   <ul id="listaEventos"></ul>
 </section>
 
-<!-- UBICACIONES -->
+<!-- ================= UBICACIONES ================= -->
 <section>
   <h2>📍 Ubicaciones</h2>
   <ul id="listaUbicaciones"></ul>
 </section>
 
-<!-- CONTACTOS -->
+<!-- ================= CONTACTOS ================= -->
 <section>
   <h2>👤 Contactos</h2>
   <ul id="listaContactos"></ul>
@@ -52,6 +53,7 @@ import {
   doc
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
+/* CONFIGURACIÓN FIREBASE */
 const firebaseConfig = {
   apiKey: "AIzaSyCR9vM3HNZ0QyCpi0tLV-g865VQ53XcBP4",
   authDomain: "gestion-eventos-steven.firebaseapp.com",
@@ -65,13 +67,13 @@ const db = getFirestore(app);
 const eventosSnap = await getDocs(collection(db, "eventos"));
 eventosSnap.forEach(d => {
   const e = d.data();
-  listaEventos.innerHTML += `
+  document.getElementById("listaEventos").innerHTML += `
     <li>
-      <strong>${e.titulo}</strong><br>
-      📅 ${e.fecha} ⏰ ${e.hora}<br>
+      <strong>${e.titulo || "Sin título"}</strong><br>
+      📅 ${e.fecha || "-"} ⏰ ${e.hora || "-"}<br>
       📍 ${e.lugar || "-"}<br>
 
-      <button onclick="editarEvento('${d.id}', '${e.titulo}')">✏️ Editar</button>
+      <button onclick="editarEvento('${d.id}', '${e.titulo || ""}')">✏️ Editar</button>
       <button onclick="eliminarEvento('${d.id}')">🗑️ Eliminar</button>
     </li>
     <hr>
@@ -87,7 +89,7 @@ window.eliminarEvento = async function(id) {
 };
 
 window.editarEvento = async function(id, tituloActual) {
-  const nuevoTitulo = prompt("Editar título del evento:", tituloActual);
+  const nuevoTitulo = prompt("Editar título:", tituloActual);
   if (nuevoTitulo) {
     await updateDoc(doc(db, "eventos", id), { titulo: nuevoTitulo });
     alert("✏️ Evento actualizado");
@@ -99,10 +101,10 @@ window.editarEvento = async function(id, tituloActual) {
 const ubicSnap = await getDocs(collection(db, "ubicaciones"));
 ubicSnap.forEach(d => {
   const u = d.data();
-  listaUbicaciones.innerHTML += `
+  document.getElementById("listaUbicaciones").innerHTML += `
     <li>
-      <strong>${u.titulo}</strong><br>
-      📍 ${u.direccion}<br>
+      <strong>${u.titulo || "Sin título"}</strong><br>
+      📍 ${u.direccion || "-"}<br>
       🌍 ${u.latitud || "-"}, ${u.longitud || "-"}<br>
 
       <button onclick="eliminarUbicacion('${d.id}')">🗑️ Eliminar</button>
@@ -123,9 +125,9 @@ window.eliminarUbicacion = async function(id) {
 const contSnap = await getDocs(collection(db, "contactos"));
 contSnap.forEach(d => {
   const c = d.data();
-  listaContactos.innerHTML += `
+  document.getElementById("listaContactos").innerHTML += `
     <li>
-      <strong>${c.nombre}</strong><br>
+      <strong>${c.nombre || "Sin nombre"}</strong><br>
       📞 ${c.telefono || "-"}<br>
       📧 ${c.email || "-"}<br>
       🏷️ ${c.tipo || "-"}<br>
@@ -147,5 +149,6 @@ window.eliminarContacto = async function(id) {
 
 </body>
 </html>
+
 
 
