@@ -1,9 +1,5 @@
-// FUNCIONES.JS
 // ESTE ARCHIVO CONTROLA LOS FORMULARIOS DE EVENTOS, UBICACIONES Y CONTACTOS
-
-// -----------------------------
 // EVENTOS
-// -----------------------------
 document.addEventListener("DOMContentLoaded", () => {
     const formEvento = document.getElementById("formEvento");
     const listaEventos = document.getElementById("listaEventos");
@@ -33,9 +29,8 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // -----------------------------
     // UBICACIONES
-    // -----------------------------
+  
     const formUbicacion = document.getElementById("formUbicacion");
     const listaUbicaciones = document.getElementById("listaUbicaciones");
 
@@ -55,9 +50,9 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // -----------------------------
+   
     // CONTACTOS
-    // -----------------------------
+   
     const formContacto = document.getElementById("formContacto");
     const listaContactos = document.getElementById("listaContactos");
 
